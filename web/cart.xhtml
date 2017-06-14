@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:c="http://xmlns.jcp.org/jsp/jstl/core">
+    <h:head>
+        <title><ui:insert name="title">Cafeteria-Carro</ui:insert></title>
+        <h:outputStylesheet library="css" name="jsfcrud.css"/>
+        <h:outputScript library="js" name="jsfcrud.js"/>
+    </h:head>
+
+    <h:body>
+
+        <p:growl id="growl" life="3000" />
+
+        <p:layout fullPage="true">
+            
+            <p:layoutUnit position="north" size="65" header="Cafeteria Ordering System">
+                
+                <h:form id="menuForm">
+                    <p:menubar>
+                        <p:menuitem value="Menú" outcome="/index" icon="ui-icon-home" action="#{index.setInd(2)}"/>
+                        <p:menuitem value="Carrito" outcome="/cart" icon="fa-shopping-cart"/>
+
+                    </p:menubar>
+                </h:form>
+            </p:layoutUnit>
+
+            <p:layoutUnit position="center" size="800">
+                <h2>Detalle de la compra</h2>
+                <h:outputText id="cartSize" value="Tu carro tiene #{cart.cartCount} item(s) actualmente"/><br/>
+
+                <ui:repeat value="#{cart.cartContents.entrySet().toArray()}" var="p"><br/>
+                    Nombre del producto: #{p.key.name}, Precio del producto: #{p.key.price}, Cantidad: #{p.value}
+                    Precio Total: 
+                    <h:outputText rendered="#{p.value > 1}" value="#{p.key.price * p.value}"/>
+                    <h:outputText rendered="#{p.value == 1}" value="#{p.key.price}"/><br/>
+
+                    <h:form>
+                        <h:commandButton value="Quitar del carrito" action="#{cart.remove(p.key)}"/>
+                        <h:commandButton value="Agregar al carrito" action="#{cart.add(p.key)}"/>
+                    </h:form>
+
+                </ui:repeat>
+                    
+                    <h:form>
+                        <br/>
+                        <h:outputText value="Monto total de la compra: "/>
+                        <h:outputText value="#{cart.total}"/><br/>
+                        <h:commandButton value="Confirmar orden" action="#{mailgctr.setMessage(cart.total)}"/>
+                    </h:form>
+                <p:separator/>
+                    <h2>Seleccionar hora</h2>
+                    <h:form>
+                        <h:commandButton value="10:00" action="#{mailgctr.setHora('10:00')}"/>
+                        <h:commandButton value="11:00" action="#{mailgctr.setHora('11:00')}"/>
+                        <h:commandButton value="12:00" action="#{mailgctr.setHora('12:00')}"/>
+                        <h:commandButton value="13:00" action="#{mailgctr.setHora('13:00')}"/>
+                        <h:commandButton value="14:00" action="#{mailgctr.setHora('14:00')}"/>
+                        <h:commandButton value="15:00" action="#{mailgctr.setHora('15:00')}"/>
+                        <h:commandButton value="16:00" action="#{mailgctr.setHora('16:00')}"/>
+                        <h:commandButton value="17:00" action="#{mailgctr.setHora('17:00')}"/><br/><br/>
+                        <h:outputText value="Hora seleccionada: "/>
+                        <h:outputText value="#{mailgctr.getHora()}"/><br/>
+                    </h:form>
+                <p:separator/>
+                    <h2>Ingresar dirección</h2>
+                    <h:form>
+                        <table>
+                            <tr>
+                                <td align="right">Dirección:</td>
+                                <td><h:inputTextarea value="#{mailgctr.direccion}"/> </td>
+                            </tr>
+                        </table>              
+                        <h:commandButton value="Confirmar dirección"/>
+                    </h:form>
+                <p:separator/>
+                    <h2>Seleccionar método de pago</h2>
+                    <h:form>
+                        <h:commandButton value="Efectivo" action="#{mailgctr.setMpago('Efectivo')}"/>
+                        <h:commandButton value="Débito" action="#{mailgctr.setMpago('Débito')}"/><br/><br/>
+                        <h:outputText value="Método de pago seleccionado: "/>
+                        <h:outputText value="#{mailgctr.getMpago()}"/><br/>
+                        <p:separator/>
+                        <h2>Finalizar compra</h2>
+                        <h:commandButton value="Finalizar compra" action="#{mailgctr.send()}"/>
+                        <p:dialog header="Confirmación" widgetVar="dlg1" minHeight="40">
+                            <h:outputText value="Compra realizada con éxito !" />
+                        </p:dialog>
+                    </h:form>
+ 
+                
+            </p:layoutUnit>
+            
+            
+
+        </p:layout>     
+        
+                 
+    </h:body>
+    
+</html>
+

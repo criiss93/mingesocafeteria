@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:c="http://xmlns.jcp.org/jsp/jstl/core">
+    <h:head>
+        <title><ui:insert name="title">Cafeteria-Producto</ui:insert></title>
+        <h:outputStylesheet library="css" name="jsfcrud.css"/>
+        <h:outputScript library="js" name="jsfcrud.js"/>
+    </h:head>
+
+    <h:body>
+
+        <p:growl id="growl" life="3000" />
+
+        <p:layout fullPage="true">
+            
+            <p:layoutUnit position="north" size="65" header="Cafeteria Ordering System">
+                <h:form id="menuForm">
+                    <p:menubar>
+                        <p:menuitem value="Menú" outcome="/index" icon="ui-icon-home"/>
+                        <p:menuitem value="Carrito" outcome="/cart" icon="fa-shopping-cart"/>
+                    </p:menubar>
+                </h:form>
+            </p:layoutUnit>
+
+            <p:layoutUnit position="center" size="500">
+
+                #{product.checkIfQueryExists()} 
+                <h:outputText id="cartSize" value="Tu carro tiene #{cart.cartCount} item(s) actualmente"/><br/><br/>
+
+                Nombre del producto:    #{product.product.name}<br/> 
+                Precio del producto:   #{product.product.price}<br/>
+                <h:form id="form">
+                    <input type="hidden" name="query" value="#{product.query}"/>
+                    <h:commandButton value="Agregar al carrito" action="#{product.addToCart()}">
+                        <f:ajax execute="@form" render=":cartSize"/>
+                    </h:commandButton>
+
+                </h:form>  
+
+
+                
+              
+            </p:layoutUnit>
+
+        </p:layout>     
+        
+                 
+    </h:body>
+    
+</html>
+
+
+
